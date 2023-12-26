@@ -14,6 +14,10 @@ public class ShoppingCart {
 
     private List<Product> allItemsInCart = new LinkedList<>();
 
+    private Customer customer;
+
+    private double totalCartCost;
+
     void addItem(Product item) {
         allItemsInCart.add(item);
 
@@ -30,6 +34,7 @@ public class ShoppingCart {
         }
 
         System.out.println("Товар добавлен в корзину: " + item);
+        updateTotalCartCost();
     }
 
     void addProductToPacket(WeighedProduct product, int amount) {
@@ -48,6 +53,7 @@ public class ShoppingCart {
         }
         allItemsInCart.add(product);
         System.out.println("Товар добавлен в пакет. Его необходимо будет взвесить: " + product);
+        updateTotalCartCost();
     }
 
     void displayItems() {
@@ -94,6 +100,7 @@ public class ShoppingCart {
         } else {
             System.out.println("Неверный индекс товара для взвешивания.");
         }
+        updateTotalCartCost();
     }
 
     void removeItem(int index) {
@@ -112,5 +119,39 @@ public class ShoppingCart {
         } else {
             System.out.println("Неверный индекс товара для удаления.");
         }
+        updateTotalCartCost();
+    }
+
+    private void updateTotalCartCost() {
+        double totalCost = 0.0;
+
+        for (CartItem cartItem : cartItems) {
+            totalCost += cartItem.getTotalCost();
+        }
+
+        for (Map.Entry<WeighedProduct, PacketOfProducts> entry : productsToWeigh.entrySet()) {
+            PacketOfProducts packet = entry.getValue();
+            totalCost += packet.getTotalCost();
+        }
+
+        totalCartCost = totalCost;
+    }
+
+    public boolean allItemsWeighed() {
+        for (PacketOfProducts packet : productsToWeigh.values()) {
+            if (!packet.isWeighed()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    //TODO: Придумать, где вызывать этот метод. Ибо корзину после покупки надо чистить.
+    public void clearCart() {
+        cartItems.clear();
+        productsToWeigh.clear();
+        allItemsInCart.clear();
+        totalCartCost = 0.0;
     }
 }
