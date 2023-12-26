@@ -10,18 +10,15 @@ public class ShoppingCart {
 
     private List<CartItem> cartItems = new ArrayList<>();
 
-    private HashMap<WeighedProduct, PacketOfGoods> productsToWeigh = new LinkedHashMap<>();
+    private HashMap<WeighedProduct, PacketOfProducts> productsToWeigh = new LinkedHashMap<>();
 
     private List<Product> allItemsInCart = new LinkedList<>();
 
     void addItem(Product item) {
         allItemsInCart.add(item);
-        //TODO: Понять почему не добавляется WeighedProduct. Если попробовать добавить "яблоки", то этот товар не попадет в allItemsInCart, а хотелось бы.
-        // При этом просто Product спокойно добавляются.
 
         if (item instanceof WeighedProduct) {
-            productsToWeigh.put((WeighedProduct) item, new PacketOfGoods(0, false, 0.0));
-            allItemsInCart.add(item);
+            productsToWeigh.put((WeighedProduct) item, new PacketOfProducts(0, false, 0.0));
         } else {
             cartItems.stream()
                     .filter(cartItem -> cartItem.getProduct().equals(item))
@@ -37,7 +34,7 @@ public class ShoppingCart {
 
     void addProductToPacket(WeighedProduct product, int amount) {
         if (productsToWeigh.containsKey(product)) {
-            PacketOfGoods packet = productsToWeigh.get(product);
+            PacketOfProducts packet = productsToWeigh.get(product);
 
             if (packet.isWeighed()) {
                 packet.setWeighed(false);
@@ -46,7 +43,7 @@ public class ShoppingCart {
 
             packet.setQuantity(packet.getQuantity() + amount);
         } else {
-            PacketOfGoods packet = new PacketOfGoods(amount, false, 0.0);
+            PacketOfProducts packet = new PacketOfProducts(amount, false, 0.0);
             productsToWeigh.put(product, packet);
         }
         allItemsInCart.add(product);
@@ -60,9 +57,9 @@ public class ShoppingCart {
             System.out.println(index + "." + " - " + cartItem);
             index++;
         }
-        for (Map.Entry<WeighedProduct, PacketOfGoods> entry : productsToWeigh.entrySet()) {
+        for (Map.Entry<WeighedProduct, PacketOfProducts> entry : productsToWeigh.entrySet()) {
             WeighedProduct product = entry.getKey();
-            PacketOfGoods packet = entry.getValue();
+            PacketOfProducts packet = entry.getValue();
             System.out.println(index + "." + " - " + product.toString() + packet.toString());
             index++;
         }
@@ -71,9 +68,9 @@ public class ShoppingCart {
     void displayItemsToWeigh() {
         System.out.println("Товары для взвешивания: ");
         int index = 1;
-        for (Map.Entry<WeighedProduct, PacketOfGoods> entry : productsToWeigh.entrySet()) {
+        for (Map.Entry<WeighedProduct, PacketOfProducts> entry : productsToWeigh.entrySet()) {
             WeighedProduct product = entry.getKey();
-            PacketOfGoods packet = entry.getValue();
+            PacketOfProducts packet = entry.getValue();
             System.out.println(index + "." + " - " + product.toString() + packet.toString());
             index++;
         }
@@ -85,7 +82,7 @@ public class ShoppingCart {
 
         if (index >= 0 && index < weighedProductList.size()) {
             WeighedProduct weighedProduct = weighedProductList.get(index);
-            PacketOfGoods packet = productsToWeigh.get(weighedProduct);
+            PacketOfProducts packet = productsToWeigh.get(weighedProduct);
             if (!packet.isWeighed()) {
                 packet.setWeighed(true);
                 double totalPrice = weighedProduct.getPrice() * packet.getQuantity();
