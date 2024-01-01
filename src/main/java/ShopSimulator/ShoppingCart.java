@@ -14,8 +14,6 @@ public class ShoppingCart {
 
     private List<Product> allItemsInCart = new LinkedList<>();
 
-    private Customer customer;
-
     private double totalCartCost;
 
     void addItem(Product item) {
@@ -129,8 +127,7 @@ public class ShoppingCart {
             totalCost += cartItem.getTotalCost();
         }
 
-        for (Map.Entry<WeighedProduct, PacketOfProducts> entry : productsToWeigh.entrySet()) {
-            PacketOfProducts packet = entry.getValue();
+        for (PacketOfProducts packet : productsToWeigh.values()) {
             totalCost += packet.getTotalCost();
         }
 

@@ -42,6 +42,7 @@ public class Customer {
             boolean paymentSuccess = paymentStrategy.pay(amount, this);
             if (paymentSuccess) {
                 shoppingCart.clearCart();
+                paymentStrategy = null;
             }
         } else {
             System.out.println("Не выбрана стратегия оплаты!");
