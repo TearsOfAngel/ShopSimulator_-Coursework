@@ -5,13 +5,15 @@ import ShopSimulator.strategy.PaymentStrategy;
 
 public class CashPayment implements PaymentStrategy {
 
-    public void pay(double amount, Customer customer) {
+    public boolean pay(double amount, Customer customer) {
         double walletBalance = customer.getWalletBalance();
         if (walletBalance >= amount) {
-            customer.setWalletBalance(walletBalance - amount);
-            System.out.println("Оплата наличными прошла успешно.");
+            customer.reduceWalletBalance(amount);
+            System.out.println("Оплата наличными прошла успешно!");
+            return true;
         } else {
             System.out.println("Недостаточно наличных средств для оплаты!");
+            return false;
         }
     }
 

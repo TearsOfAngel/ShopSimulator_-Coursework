@@ -146,8 +146,6 @@ public class ShoppingCart {
         return true;
     }
 
-
-    //TODO: Придумать, где вызывать этот метод. Ибо корзину после покупки надо чистить.
     public void clearCart() {
         cartItems.clear();
         productsToWeigh.clear();

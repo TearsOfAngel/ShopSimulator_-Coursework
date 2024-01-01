@@ -6,12 +6,15 @@ import ShopSimulator.strategy.PaymentStrategy;
 
 public class BonusPayment implements PaymentStrategy {
 
-    public void pay(double amount, Customer customer) {
+    public boolean pay(double amount, Customer customer) {
         BonusCard bonusCard = customer.getBonusCard();
-        if (bonusCard != null) {
+        if (bonusCard.getPoints() >= amount) {
             bonusCard.redeemBonusPoints(amount);
+            System.out.println("Оплата бонусами прошла успешно! ");
+            return true;
         } else {
-            System.out.println("Невозможно произвести оплату бонусами. У вас нет карты!");
+            System.out.println("Не хватает баллов.");
+            return false;
         }
     }
 

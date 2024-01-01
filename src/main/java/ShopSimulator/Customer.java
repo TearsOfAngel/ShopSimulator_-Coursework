@@ -16,6 +16,8 @@ public class Customer {
 
     private PaymentStrategy paymentStrategy;
 
+    private ShoppingCart shoppingCart;
+
     public Customer(String name, BonusCard bonusCard, double walletBalance) {
         this.name = name;
         this.bonusCard = bonusCard;
@@ -27,11 +29,22 @@ public class Customer {
         System.out.println("Выбрана оплата: " + paymentStrategy.toString());
     }
 
+    public void reduceWalletBalance(double amount) {
+        if (amount <= walletBalance) {
+            walletBalance -= amount;
+        } else {
+            System.out.println("Не хватает средств в кошельке.");
+        }
+    }
+
     public void makePayment(double amount) {
         if (paymentStrategy != null) {
-            paymentStrategy.pay(amount, this);
+            boolean paymentSuccess = paymentStrategy.pay(amount, this);
+            if (paymentSuccess) {
+                shoppingCart.clearCart();
+            }
         } else {
-            System.out.println("Не выбрана стратегия оплаты");
+            System.out.println("Не выбрана стратегия оплаты!");
         }
     }
 

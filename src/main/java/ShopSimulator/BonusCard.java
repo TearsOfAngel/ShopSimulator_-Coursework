@@ -14,7 +14,6 @@ public class BonusCard {
             System.out.println("Недостаточно баллов на карте");
         } else {
             this.points -= points;
-            System.out.println("Оплата бонусами прошла успешно!");
         }
     }
 
