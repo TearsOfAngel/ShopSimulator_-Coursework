@@ -5,22 +5,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class WeighedProduct extends Product{
+public class ProductForWeighing extends Product{
 
     private double weight;
 
     private boolean isWeighed;
 
 
-    public WeighedProduct(String name, double price, double weight) {
+    public ProductForWeighing(String name, double price, double weight) {
         super(name, price);
         this.weight = weight;
         this.isWeighed = false;
-    }
-
-    @Override
-    void displayInfo() {
-        System.out.println(getName() + " - " + getPrice() + " рублей за 1 кг " + weight + " кг");
     }
 
     @Override

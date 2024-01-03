@@ -10,7 +10,7 @@ public class ShoppingCart {
 
     private List<CartItem> cartItems = new ArrayList<>();
 
-    private HashMap<WeighedProduct, PacketOfProducts> productsToWeigh = new LinkedHashMap<>();
+    private HashMap<ProductForWeighing, PacketOfProducts> productsToWeigh = new LinkedHashMap<>();
 
     private List<Product> allItemsInCart = new LinkedList<>();
 
@@ -19,8 +19,8 @@ public class ShoppingCart {
     void addItem(Product item) {
         allItemsInCart.add(item);
 
-        if (item instanceof WeighedProduct) {
-            productsToWeigh.put((WeighedProduct) item, new PacketOfProducts(0, false, 0.0));
+        if (item instanceof ProductForWeighing) {
+            productsToWeigh.put((ProductForWeighing) item, new PacketOfProducts(0, false, 0.0));
         } else {
             cartItems.stream()
                     .filter(cartItem -> cartItem.getProduct().equals(item))
@@ -35,7 +35,7 @@ public class ShoppingCart {
         updateTotalCartCost();
     }
 
-    void addProductToPacket(WeighedProduct product, int amount) {
+    void addProductToPacket(ProductForWeighing product, int amount) {
         if (productsToWeigh.containsKey(product)) {
             PacketOfProducts packet = productsToWeigh.get(product);
 
@@ -61,8 +61,8 @@ public class ShoppingCart {
             System.out.println(index + "." + " - " + cartItem);
             index++;
         }
-        for (Map.Entry<WeighedProduct, PacketOfProducts> entry : productsToWeigh.entrySet()) {
-            WeighedProduct product = entry.getKey();
+        for (Map.Entry<ProductForWeighing, PacketOfProducts> entry : productsToWeigh.entrySet()) {
+            ProductForWeighing product = entry.getKey();
             PacketOfProducts packet = entry.getValue();
             System.out.println(index + "." + " - " + product.toString() + packet.toString());
             index++;
@@ -72,8 +72,8 @@ public class ShoppingCart {
     void displayItemsToWeigh() {
         System.out.println("Товары для взвешивания: ");
         int index = 1;
-        for (Map.Entry<WeighedProduct, PacketOfProducts> entry : productsToWeigh.entrySet()) {
-            WeighedProduct product = entry.getKey();
+        for (Map.Entry<ProductForWeighing, PacketOfProducts> entry : productsToWeigh.entrySet()) {
+            ProductForWeighing product = entry.getKey();
             PacketOfProducts packet = entry.getValue();
             System.out.println(index + "." + " - " + product.toString() + packet.toString());
             index++;
@@ -82,14 +82,14 @@ public class ShoppingCart {
 
     void weighItem(int index) {
         index -= 1;
-        List<WeighedProduct> weighedProductList = new ArrayList<>(productsToWeigh.keySet());
+        List<ProductForWeighing> productForWeighingList = new ArrayList<>(productsToWeigh.keySet());
 
-        if (index >= 0 && index < weighedProductList.size()) {
-            WeighedProduct weighedProduct = weighedProductList.get(index);
-            PacketOfProducts packet = productsToWeigh.get(weighedProduct);
+        if (index >= 0 && index < productForWeighingList.size()) {
+            ProductForWeighing productForWeighing = productForWeighingList.get(index);
+            PacketOfProducts packet = productsToWeigh.get(productForWeighing);
             if (!packet.isWeighed()) {
                 packet.setWeighed(true);
-                double totalPrice = weighedProduct.getPrice() * packet.getQuantity();
+                double totalPrice = productForWeighing.getPrice() * packet.getQuantity();
                 packet.setTotalCost(totalPrice);
                 System.out.println("Взвешивание товара прошло успешно! Общая стоимость: " + totalPrice);
             } else {
@@ -107,7 +107,7 @@ public class ShoppingCart {
         if (index >= 0 && index < allItemsInCart.size()) {
             Product removedProduct = allItemsInCart.get(index);
 
-            if (removedProduct instanceof WeighedProduct) {
+            if (removedProduct instanceof ProductForWeighing) {
                 productsToWeigh.remove(removedProduct);
             } else {
                 cartItems.removeIf(cartItem -> cartItem.getProduct().equals(removedProduct));

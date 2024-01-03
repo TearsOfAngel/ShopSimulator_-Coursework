@@ -42,11 +42,17 @@ public class Main {
         System.out.println("4. Убрать товар из корзины");
         System.out.println("5. Выбрать стратегию оплаты");
         System.out.println("6. Оплатить покупку");
-        System.out.println("7. Выйти из магазина");
+        System.out.println("7. Посмотреть баланс");
+        System.out.println("8. Выйти из магазина");
         System.out.println(System.lineSeparator());
     }
 
-    private static void handleChoice(int choice, Shop shop, List<Product> productList, ShoppingCart shoppingCart, Customer customer, Scanner scanner) {
+    private static void handleChoice(int choice,
+                                     Shop shop,
+                                     List<Product> productList,
+                                     ShoppingCart shoppingCart,
+                                     Customer customer,
+                                     Scanner scanner) {
         switch (choice) {
             case 1 -> {
                 addItemToCart(shop, productList, shoppingCart, scanner);
@@ -67,6 +73,9 @@ public class Main {
                 makePayment(customer, shoppingCart);
             }
             case 7 -> {
+                customer.showBalanceBonusesAndCash();
+            }
+            case 8 -> {
                 exitStore(scanner);
             }
             default -> System.out.println("Неверный выбор. Пожалуйста, выберите действие от 1 до 7.");
@@ -78,10 +87,10 @@ public class Main {
         System.out.println(System.lineSeparator());
         shop.displayAllItemsInStore();
         int product = scanner.nextInt() - 1;
-        if (shop.getProducts().get(product) instanceof WeighedProduct) {
+        if (shop.getProducts().get(product) instanceof ProductForWeighing) {
             System.out.println("\nКакое количество единиц товара необходимо?");
             int amountOfProducts = scanner.nextInt();
-            shoppingCart.addProductToPacket((WeighedProduct) productList.get(product), amountOfProducts);
+            shoppingCart.addProductToPacket((ProductForWeighing) productList.get(product), amountOfProducts);
         } else {
             shoppingCart.addItem(productList.get(product));
         }
